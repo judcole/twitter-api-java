@@ -10,7 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class BackgroundQueueTests {
 
     @Test
-    void getCount() {
+    void getCount_EnqueueItems_ReturnsCorrectCount() {
         var queue = new BackgroundQueue<Integer>();
         assertThat(queue.getCount()).isEqualTo(0);
         queue.enqueue(1);
@@ -20,7 +20,7 @@ class BackgroundQueueTests {
     }
 
     @Test
-    void enqueue() {
+    void enqueue_EnqueueItems_ReturnsCorrectCount() {
         var queue = new BackgroundQueue<Integer>();
         queue.enqueue(10);
         queue.enqueue(20);
@@ -29,7 +29,7 @@ class BackgroundQueueTests {
     }
 
     @Test
-    void dequeue() {
+    void dequeue_DequeueItems_returnsCorrectItems() {
         final int VALUE1 = 100;
         final int VALUE2 = 200;
         var queue = new BackgroundQueue<Integer>();
