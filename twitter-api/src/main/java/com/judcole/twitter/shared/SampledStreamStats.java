@@ -60,14 +60,10 @@ public class SampledStreamStats {
     private final Lock statsLock = new ReentrantLock();
 
     /**
-     * Instantiates a new Sampled stream stats.
+     * Construct the SampledStreamStats instance with the current date and time.
      *
-     * @param topHashtagsSize the top hashtags size
+     * @param topHashtagsSize the size of the list for the top Hashtags
      */
-/// <summary>
-    /// Construct the SampledStreamStats instance with the current date and time
-    /// </summary>
-    /// <param name="topHashtagsSize">Size of the list for the top Hashtags</param>
     public SampledStreamStats(int topHashtagsSize) {
         // Set the last updated date and time
         LastUpdated = LocalDateTime.now(ZoneOffset.UTC);
@@ -79,18 +75,12 @@ public class SampledStreamStats {
     }
 
     /**
-     * Set basic fields.
+     * Set new values for the basic fields (concurrent safe).
      *
      * @param totalHashtags   the total hashtags
      * @param totalTweets     the total tweets
      * @param tweetQueueCount the tweet queue count
      */
-/// <summary>
-    /// Set new values for the basic fields (concurrent safe)
-    /// </summary>
-    /// <param name="totalHashtags"></param>
-    /// <param name="totalTweets"></param>
-    /// <param name="tweetQueueCount"></param>
     public void SetBasicFields(long totalHashtags, long totalTweets, int tweetQueueCount) {
         // Play safe and lock the instance while we update it
         statsLock.lock();
@@ -104,14 +94,10 @@ public class SampledStreamStats {
     }
 
     /**
-     * Set calculated fields.
+     * Calculate and set all calculated fields (concurrent safe).
      *
-     * @param startTime the start time
+     * @param startTime the application start time for evaluating the elapsed time
      */
-/// <summary>
-    /// Calculate and set all calculated fields (concurrent safe)
-    /// </summary>
-    /// <param name="startTime">The application start time for evaluating the elapsed time</param>
     public void SetCalculatedFields(LocalDateTime startTime) {
         // Play safe and lock the instance while we update it
         statsLock.lock();
@@ -133,16 +119,11 @@ public class SampledStreamStats {
     }
 
     /**
-     * Update top hashtags.
+     * Update the list of top hashtags with a specified hashtag and count.
      *
-     * @param hashtag the hashtag
-     * @param count   the count
+     * @param hashtag the hashtag to add
+     * @param count   the count of occurrences of the hashtag
      */
-/// <summary>
-    /// Update the list of top hashtags with a specified hashtag and count
-    /// </summary>
-    /// <param name="hashtag">Hashtag to add</param>
-    /// <param name="count">Count of occurrences of the hashtag</param>
     public void UpdateTopHashtags(String hashtag, long count) {
         // Index of the current hashtag
         int index;
@@ -152,7 +133,7 @@ public class SampledStreamStats {
         try {
             // Find if it is already in the list and if so delete it
             for (index = 0; index < TopHashtagsSize; index++)
-                if (TopHashtags[index].equals(hashtag)) {
+                if (hashtag.equalsIgnoreCase(TopHashtags[index])) {
                     // Found the hashtag so shuffle the rest up
                     for (int i = index; i < TopHashtagsSize - 1; i++) {
                         // Shuffle the lower hashtags up a slot
