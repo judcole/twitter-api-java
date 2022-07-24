@@ -1,36 +1,55 @@
-<script>
-	export let name;
+<script lang="ts">
+    import StatsCard from "./components/StatsCard.svelte";
 
-	async function loadData(){
-		const response = await fetch("http://localhost:8080/test?param=jud");
+    export let jsonResponse: string;
 
-		name = await response.text();
-	}
-	loadData();
+    async function loadData() {
+        const response = await fetch("http://localhost:8080/getStats");
+
+        let json = await response.json();
+
+        jsonResponse = JSON.stringify(json, null, 2);
+
+        return json;
+    }
+
+    let promisedJson = loadData();
+
+    // https://www.w3schools.com/jsref/jsref_tolocalestring.asp
+    const dayName = new Date().toLocaleDateString('en', {
+        weekday: "long"
+    })
 </script>
 
 <main>
-	<h1>Hello {name} in Svelte!</h1>
+<!--    <h2>{jsonResponse}</h2>-->
+
+    <h2 class="title">Welcome to our Twitter SampledStream Application on this fine {dayName}</h2>
+
+    {#await promisedJson then json}
+        <StatsCard {...json}
+        class="spacer"/>
+    {/await}
+
+    <hr class="spacer"/>
+    <p>Learn more about <a href="https://www.judcole.com">Jud Cole</a>.</p>
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+    main {
+        text-align: center;
+        padding: 1em;
+        max-width: 240px;
+        margin: 0 auto;
+    }
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+    .spacer {
+        margin-top: 60px;
+    }
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+    @media (min-width: 640px) {
+        main {
+            max-width: none;
+        }
+    }
 </style>
