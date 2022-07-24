@@ -90,8 +90,8 @@ class SampledStreamStatsTests {
         assertThat(stats.getLastUpdated().toLocalDate()).isEqualTo(expectedDate.toLocalDate());
         assertThat(stats.getStatus()).isNull();
 
-        assertThat(stats.TopHashtagsSize).isEqualTo(topHashtagsSize);
-        for (int i = 0; i < stats.TopHashtagsSize; i++)
+        assertThat(stats.getTopHashtagsSize()).isEqualTo(topHashtagsSize);
+        for (int i = 0; i < stats.getTopHashtagsSize(); i++)
         {
             assertThat(stats.getTopHashtags()[i]).isNull();
             assertThat(stats.getTopHashtagCounts()[0]).isZero();

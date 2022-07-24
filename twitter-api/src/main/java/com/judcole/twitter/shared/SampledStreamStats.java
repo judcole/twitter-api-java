@@ -1,8 +1,8 @@
 package com.judcole.twitter.shared;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -13,65 +13,71 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * The class to store statistics for the sampled stream.
  */
+@Component
 public class SampledStreamStats {
 
-    @Getter(AccessLevel.PUBLIC)
+    @Getter
     // Average daily number of tweets received
     private long dailyTweets;
 
     // Average hourly number of tweets received
-    @Getter(AccessLevel.PUBLIC)
-    private long HourlyTweets;
+    @Getter
+    private long hourlyTweets;
 
     // Date and time of statistics
-    @Getter(AccessLevel.PUBLIC)
-    private LocalDateTime LastUpdated;
+    @Getter
+    private LocalDateTime lastUpdated;
 
     // Extra status information
     @Getter
     @Setter
-    private String Status;
+    private String status;
 
     // List of top Hashtag counts
-    @Getter(AccessLevel.PUBLIC)
-    private final long[] TopHashtagCounts;
+    @Getter
+    private final long[] topHashtagCounts;
 
     // List of top 10 hashtags
-    @Getter(AccessLevel.PUBLIC)
-    private final String[] TopHashtags;
+    @Getter
+    private final String[] topHashtags;
 
     // Size of the list for the top Hashtags
-    @Getter(AccessLevel.PUBLIC)
-    public int TopHashtagsSize;
+    @Getter
+    private final int topHashtagsSize;
 
     // Total number of hashtags received
-    @Getter(AccessLevel.PUBLIC)
-    private long TotalHashtags;
+    @Getter
+    private long totalHashtags;
 
     // Total number of tweets received
-    @Getter(AccessLevel.PUBLIC)
-    private long TotalTweets;
+    @Getter
+    private long totalTweets;
 
     // Number of Tweets waiting to be processed in incoming queue
-    @Getter(AccessLevel.PUBLIC)
-    private int TweetQueueCount;
+    @Getter
+    private int tweetQueueCount;
 
     // Object to use for simple locking when updating complex fields
     private final Lock statsLock = new ReentrantLock();
 
     /**
-     * Construct the SampledStreamStats instance with the current date and time.
+     * Construct the SampledStreamStats instance with the default table size.
+     */
+    public SampledStreamStats() { this(10); }
+
+    /**
+     * Construct the SampledStreamStats instance with a specified table size.
      *
      * @param topHashtagsSize the size of the list for the top Hashtags
      */
     public SampledStreamStats(int topHashtagsSize) {
         // Set the last updated date and time
-        LastUpdated = LocalDateTime.now(ZoneOffset.UTC);
+        lastUpdated = LocalDateTime.now(ZoneOffset.UTC);
 
         // Create the top hashtags list
-        TopHashtagsSize = topHashtagsSize;
-        TopHashtagCounts = new long[TopHashtagsSize];
-        TopHashtags = new String[TopHashtagsSize];
+        this.topHashtagsSize = topHashtagsSize;
+        topHashtagCounts = new long[this.topHashtagsSize];
+        topHashtags = new String[this.topHashtagsSize];
     }
 
     /**
@@ -85,9 +91,9 @@ public class SampledStreamStats {
         // Play safe and lock the instance while we update it
         statsLock.lock();
         try {
-            TotalHashtags = totalHashtags;
-            TotalTweets = totalTweets;
-            TweetQueueCount = tweetQueueCount;
+            this.totalHashtags = totalHashtags;
+            this.totalTweets = totalTweets;
+            this.tweetQueueCount = tweetQueueCount;
         } finally {
             statsLock.unlock();
         }
@@ -103,16 +109,16 @@ public class SampledStreamStats {
         statsLock.lock();
         try {
             // Update the last updated date and time
-            LastUpdated = LocalDateTime.now(ZoneOffset.UTC);
+            lastUpdated = LocalDateTime.now(ZoneOffset.UTC);
 
             // Calculate and set the daily tweet rate with a check for negative durations
-            var elapsedTime = ChronoUnit.SECONDS.between(startTime, LastUpdated);
+            var elapsedTime = ChronoUnit.SECONDS.between(startTime, lastUpdated);
             var elapsedDays = Math.max(1, Math.ceil((double) elapsedTime / (60 * 60 * 24)));
-            dailyTweets = (long) (Math.ceil((double) TotalTweets) / elapsedDays);
+            dailyTweets = (long) (Math.ceil((double) totalTweets) / elapsedDays);
 
             // Calculate and set the hourly tweet rate with a check for negative durations
             var elapsedHours = Math.max(1, Math.ceil((double) elapsedTime / (60 * 60)));
-            HourlyTweets = (long) (Math.ceil((double) TotalTweets) / elapsedHours);
+            hourlyTweets = (long) (Math.ceil((double) totalTweets) / elapsedHours);
         } finally {
             statsLock.unlock();
         }
@@ -132,38 +138,38 @@ public class SampledStreamStats {
         statsLock.lock();
         try {
             // Find if it is already in the list and if so delete it
-            for (index = 0; index < TopHashtagsSize; index++)
-                if (hashtag.equalsIgnoreCase(TopHashtags[index])) {
+            for (index = 0; index < topHashtagsSize; index++)
+                if (hashtag.equalsIgnoreCase(topHashtags[index])) {
                     // Found the hashtag so shuffle the rest up
-                    for (int i = index; i < TopHashtagsSize - 1; i++) {
+                    for (int i = index; i < topHashtagsSize - 1; i++) {
                         // Shuffle the lower hashtags up a slot
-                        TopHashtags[i] = TopHashtags[i + 1];
-                        TopHashtagCounts[i] = TopHashtagCounts[i + 1];
+                        topHashtags[i] = topHashtags[i + 1];
+                        topHashtagCounts[i] = topHashtagCounts[i + 1];
                     }
                     // Clear the last slot to make sure it can be overwritten
-                    TopHashtags[TopHashtagsSize - 1] = null;
-                    TopHashtagCounts[TopHashtagsSize - 1] = 0;
+                    topHashtags[topHashtagsSize - 1] = null;
+                    topHashtagCounts[topHashtagsSize - 1] = 0;
 
                     // Done with this part
                     break;
                 }
 
             // Find if and where the hashtag qualifies to be in the list
-            for (index = 0; (index < TopHashtagsSize) && (TopHashtagCounts[index] > count); ) {
+            for (index = 0; (index < topHashtagsSize) && (topHashtagCounts[index] > count); ) {
                 index++;
             }
 
-            if (index < TopHashtagsSize) {
+            if (index < topHashtagsSize) {
                 // Found its slot so shuffle the rest down to make room
-                for (int i = TopHashtagsSize - 2; i >= index; i--) {
+                for (int i = topHashtagsSize - 2; i >= index; i--) {
                     // Shuffle the hashtag down a slot
-                    TopHashtags[i + 1] = TopHashtags[i];
-                    TopHashtagCounts[i + 1] = TopHashtagCounts[i];
+                    topHashtags[i + 1] = topHashtags[i];
+                    topHashtagCounts[i + 1] = topHashtagCounts[i];
                 }
 
                 // Set the new hashtag value and count in its correct slot
-                TopHashtags[index] = hashtag;
-                TopHashtagCounts[index] = count;
+                topHashtags[index] = hashtag;
+                topHashtagCounts[index] = count;
             }
         } finally {
             statsLock.unlock();
