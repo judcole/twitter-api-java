@@ -2,7 +2,6 @@ package com.judcole.twitter.shared;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -13,7 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * The class to store statistics for the sampled stream.
  */
-@Component
 public class SampledStreamStats {
 
     @Getter
@@ -59,11 +57,6 @@ public class SampledStreamStats {
 
     // Object to use for simple locking when updating complex fields
     private final Lock statsLock = new ReentrantLock();
-
-    /**
-     * Construct the SampledStreamStats instance with the default table size.
-     */
-    public SampledStreamStats() { this(10); }
 
     /**
      * Construct the SampledStreamStats instance with a specified table size.

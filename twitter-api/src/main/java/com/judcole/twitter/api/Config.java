@@ -1,6 +1,6 @@
 package com.judcole.twitter.api;
 
-import com.judcole.twitter.shared.SampledStreamStats;
+import com.judcole.twitter.shared.SampledStreamStatsFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,11 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan("com.judcole.twitter")
 public class Config {
-    // Default size of statistics table
-    static final int STATS_SIZE = 10;
-
     @Bean
-    public SampledStreamStats stats() {
-        return new SampledStreamStats(STATS_SIZE);
+    public SampledStreamStatsFactory statsFactory() {
+        return new SampledStreamStatsFactory();
     }
 }

@@ -1,6 +1,7 @@
 package com.judcole.twitter.api;
 
 import com.judcole.twitter.shared.SampledStreamStats;
+import com.judcole.twitter.shared.SampledStreamStatsFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +25,17 @@ public class SampledStreamController {
     // Shared total statistics
     private final SampledStreamStats stats;
 
+    // Default size of statistics table
+    private static final int STATS_SIZE = 10;
+
     /**
      * Instantiates a new Sampled stream controller.
      *
-     * @param sharedStats the shared total statistics
+     * @param statsFactory the factory to return the shared total statistics instance
      */
-    public SampledStreamController(SampledStreamStats sharedStats) {
+    public SampledStreamController(SampledStreamStatsFactory statsFactory) {
         // Save the shared stats parameter
-        stats = sharedStats;
+        stats = statsFactory.getStatsInstance(STATS_SIZE);
     }
 
     /**

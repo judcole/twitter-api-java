@@ -75,8 +75,7 @@ class SampledStreamStatsTests {
      */
     @ParameterizedTest
     @ValueSource(ints = {1, 3, 9, 100})
-    void SampledStreamStats_Create_ReturnInstance(int topHashtagsSize)
-    {
+    void SampledStreamStats_Create_ReturnInstance(int topHashtagsSize) {
         // Save the current time as the expected default time
         var expectedDate = LocalDateTime.now(ZoneOffset.UTC);
 
@@ -91,8 +90,7 @@ class SampledStreamStatsTests {
         assertThat(stats.getStatus()).isNull();
 
         assertThat(stats.getTopHashtagsSize()).isEqualTo(topHashtagsSize);
-        for (int i = 0; i < stats.getTopHashtagsSize(); i++)
-        {
+        for (int i = 0; i < stats.getTopHashtagsSize(); i++) {
             assertThat(stats.getTopHashtags()[i]).isNull();
             assertThat(stats.getTopHashtagCounts()[0]).isZero();
         }
@@ -109,8 +107,7 @@ class SampledStreamStatsTests {
      */
     @ParameterizedTest
     @ValueSource(strings = {"", "Good", "A very bad status"})
-    void SampledStreamStats_SetStatus_Successful(String status)
-    {
+    void SampledStreamStats_SetStatus_Successful(String status) {
         // Create an instance
         var stats = CreateStatsInstance(1);
 
@@ -213,8 +210,7 @@ class SampledStreamStatsTests {
      * Test that hashtags and their counts are properly added to a list of 1 top hashtags.
      */
     @Test
-    public void UpdateTopHashtags_AddTo1Top_Successful()
-    {
+    public void UpdateTopHashtags_AddTo1Top_Successful() {
         // Create an instance with one top hashtag
         var stats = CreateStatsInstance(1);
 
@@ -255,8 +251,7 @@ class SampledStreamStatsTests {
      * Test that hashtags and their counts are properly added to a list of 2 top hashtags.
      */
     @Test
-    public void UpdateTopHashtags_AddTo2Top_Successful()
-    {
+    public void UpdateTopHashtags_AddTo2Top_Successful() {
         // Create an instance with two top hashtags
         var stats = CreateStatsInstance(2);
 
@@ -300,8 +295,7 @@ class SampledStreamStatsTests {
      * Test that hashtags and their counts are properly added to a list of 3 top hashtags.
      */
     @Test
-    public void UpdateTopHashtags_AddTo3Top_Successful()
-    {
+    public void UpdateTopHashtags_AddTo3Top_Successful() {
         // Create an instance with 3 top hashtags
         var stats = CreateStatsInstance(3);
 
@@ -382,8 +376,7 @@ class SampledStreamStatsTests {
      * Test that hashtags and their counts are properly added to a list of 9 top hashtags.
      */
     @Test
-    public void UpdateTopHashtags_AddTo9Top_Successful()
-    {
+    public void UpdateTopHashtags_AddTo9Top_Successful() {
         // Create an instance with 9 top hashtags
         final int LIST_SIZE = 9;
         var stats = CreateStatsInstance(LIST_SIZE);
@@ -391,63 +384,83 @@ class SampledStreamStatsTests {
         // Add a hashtag and check the result
         stats.UpdateTopHashtags(HASHTAG1, 1);
         CheckTopHashtag(stats, 0, HASHTAG1, 1);
-        for (int i = 1; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 1; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add it again and check the result
         stats.UpdateTopHashtags(HASHTAG1, 2);
         CheckTopHashtag(stats, 0, HASHTAG1, 2);
-        for (int i = 1; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 1; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add it again and check the result
         stats.UpdateTopHashtags(HASHTAG1, 10);
         CheckTopHashtag(stats, 0, HASHTAG1, 10);
-        for (int i = 1; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 1; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add another hashtag and check the result
         stats.UpdateTopHashtags(HASHTAG2, 9);
         CheckTopHashtag(stats, 0, HASHTAG1, 10);
         CheckTopHashtag(stats, 1, HASHTAG2, 9);
-        for (int i = 2; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 2; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add it again and check the result
         stats.UpdateTopHashtags(HASHTAG2, 10);
         CheckTopHashtag(stats, 0, HASHTAG2, 10);
         CheckTopHashtag(stats, 1, HASHTAG1, 10);
-        for (int i = 2; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 2; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add it again and check the result
         stats.UpdateTopHashtags(HASHTAG2, 11);
         CheckTopHashtag(stats, 0, HASHTAG2, 11);
         CheckTopHashtag(stats, 1, HASHTAG1, 10);
-        for (int i = 2; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 2; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add another hashtag and check the result
         stats.UpdateTopHashtags(HASHTAG3, 9);
         CheckTopHashtag(stats, 0, HASHTAG2, 11);
         CheckTopHashtag(stats, 1, HASHTAG1, 10);
         CheckTopHashtag(stats, 2, HASHTAG3, 9);
-        for (int i = 3; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 3; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add it again and check the result
         stats.UpdateTopHashtags(HASHTAG3, 10);
         CheckTopHashtag(stats, 0, HASHTAG2, 11);
         CheckTopHashtag(stats, 1, HASHTAG3, 10);
         CheckTopHashtag(stats, 2, HASHTAG1, 10);
-        for (int i = 3; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 3; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add it again and check the result
         stats.UpdateTopHashtags(HASHTAG3, 11);
         CheckTopHashtag(stats, 0, HASHTAG3, 11);
         CheckTopHashtag(stats, 1, HASHTAG2, 11);
         CheckTopHashtag(stats, 2, HASHTAG1, 10);
-        for (int i = 3; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 3; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add it again and check the result
         stats.UpdateTopHashtags(HASHTAG3, 12);
         CheckTopHashtag(stats, 0, HASHTAG3, 12);
         CheckTopHashtag(stats, 1, HASHTAG2, 11);
         CheckTopHashtag(stats, 2, HASHTAG1, 10);
-        for (int i = 3; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 3; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add another hashtag and check the result
         stats.UpdateTopHashtags(HASHTAG4, 11);
@@ -455,7 +468,9 @@ class SampledStreamStatsTests {
         CheckTopHashtag(stats, 1, HASHTAG4, 11);
         CheckTopHashtag(stats, 2, HASHTAG2, 11);
         CheckTopHashtag(stats, 3, HASHTAG1, 10);
-        for (int i = 4; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 4; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
 
         // Add another hashtag and check the result
         stats.UpdateTopHashtags(HASHTAG5, 12);
@@ -464,7 +479,9 @@ class SampledStreamStatsTests {
         CheckTopHashtag(stats, 2, HASHTAG4, 11);
         CheckTopHashtag(stats, 3, HASHTAG2, 11);
         CheckTopHashtag(stats, 4, HASHTAG1, 10);
-        for (int i = 5; i < LIST_SIZE; i++) { CheckTopHashtag(stats, i, null, 0); }
+        for (int i = 5; i < LIST_SIZE; i++) {
+            CheckTopHashtag(stats, i, null, 0);
+        }
     }
 
     /**
