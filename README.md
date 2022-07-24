@@ -16,6 +16,7 @@
 - [3. Folders and Files](#3-folders-and-files)
 - [4. Usage and Testing](#4-usage-and-testing)
   - [4.1. Setup](#41-setup)
+  - [Implementation Notes](#implementation-notes)
   - [4.2. Manual Testing](#42-manual-testing)
   - [4.3. Automated Unit Tests](#43-automated-unit-tests)
 - [5. Next Steps / To Do List](#5-next-steps--to-do-list)
@@ -54,8 +55,12 @@
 
 ### 4.1. Setup
 
-- Create an environment variable `STREAM_BEARER_TOKEN` with your Twitter API bearer token
-- Load the source folder(s) into your favorite IDE
+- Create an environment variable `STREAM_BEARER_TOKEN` with your Twitter API bearer token.
+- Load the source folder(s) into your favorite IDE and run them.
+
+### Implementation Notes
+
+- It was not mentioned in the specification but Twitter tags are NOT case sensitive, so hashtags must be counted as equal when they only differ by case.
 
 ### 4.2. Manual Testing
 
@@ -91,11 +96,11 @@
 ### 5.1. To Do before submission
 
 - [ ] Create twitter-api project to process calls to Twitter API
-  - [ ] Replace controller with dummy stream stats controller
-  - [ ] Add Test suite project and basic tests
+  - [x] Replace controller with dummy stream stats controller
+  - [x] Add Test suite project and basic tests
   - [ ] Add strategic exception handling
-  - [ ] Stats for API result to use shared class
-    - [ ] Return extra stats
+  - [x] Stats for API result to use shared class
+    - [x] Return extra stats
   - [ ] Create background task to attach to Twitter stream
     - [ ] Add dummy tweets to concurrent queue
     - [ ] Add incoming tweets to concurrent queue
@@ -105,9 +110,7 @@
       - [ ] Add / update top 10 tag list
 - [ ] Create twitter-ui project to display twitter hashtag statistics
   - [ ] Replace home page with dummy stream stats
-  - [ ] Add Test suite project and basic tests
-  - [ ] Add Index Page Object to simplify testing
-  - [ ] Add strategic exception handling and tests
+  - [ ] Add basic tests
   - [ ] Stats for API result to use shared class
   - [ ] Call collector API to retrieve latest stats
 - [ ] Documentation
@@ -134,6 +137,7 @@
 |    M     | Performance  |   S    | SampledStreamStats.UpdateTopHashtags method to add to the top 10 table could:                                         |
 |          |              |        | a) Check that the count is greater than the count of the lowest entry before doing any other checks                   |
 |          |              |        | b) work upwards from the lowest count rather than downwards from the highest count                                    |
+|          |              |        | c) also store the lower cased hashtags so that all of the string compares are case sensitive (more efficient)         |
 |    M     | Performance  |   M    | Create multiple TweetBlock processors that can each run concurrently                                                  |
 |    M     | Performance  |   S    | Batch up (concatenate) incoming tweets before adding them as a block to the queue and then deserialize them as a list |
 |    M     | Architecture |   M    | Move some of the hard coded values and URLs to configuration files                                                    |
