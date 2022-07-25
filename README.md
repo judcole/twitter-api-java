@@ -16,18 +16,18 @@
 - [3. Folders and Files](#3-folders-and-files)
 - [4. Usage and Testing](#4-usage-and-testing)
   - [4.1. Setup](#41-setup)
-  - [4.2. Implementation Notes](#42-implementation-notes)
-  - [4.3. Manual Testing](#43-manual-testing)
-  - [4.4. Automated Unit Tests](#44-automated-unit-tests)
-- [5. Next Steps / To Do List](#5-next-steps--to-do-list)
-  - [5.1. To Do before submission](#51-to-do-before-submission)
-  - [5.2. Future features and steps for consideration](#52-future-features-and-steps-for-consideration)
-- [6. Design diagrams](#6-design-diagrams)
-  - [6.1. twitter-api Web API](#61-twitter-api-web-api)
-  - [6.2. twitter-ui Web Application](#62-twitter-ui-web-application)
-- [7. Twitter APIs](#7-twitter-apis)
-  - [7.1. Using Postman to access Twitter APIs](#71-using-postman-to-access-twitter-apis)
-  - [7.2. Run the solution projects under Docker](#72-run-the-solution-projects-under-docker)
+  - [4.2. Manual Testing](#42-manual-testing)
+  - [4.3. Automated Unit Tests](#43-automated-unit-tests)
+- [5. Implementation Notes](#5-implementation-notes)
+- [6. Next Steps / To Do List](#6-next-steps--to-do-list)
+  - [6.1. To Do before submission](#61-to-do-before-submission)
+  - [6.2. Future features and steps for consideration](#62-future-features-and-steps-for-consideration)
+- [7. Design diagrams](#7-design-diagrams)
+  - [7.1. twitter-api Web API](#71-twitter-api-web-api)
+  - [7.2. twitter-ui Web Application](#72-twitter-ui-web-application)
+- [8. Twitter APIs](#8-twitter-apis)
+  - [8.1. Using Postman to access Twitter APIs](#81-using-postman-to-access-twitter-apis)
+  - [8.2. Run the solution projects under Docker](#82-run-the-solution-projects-under-docker)
 
 [//]: # ( spell-checker: ignore blazor choco dockerignore plantuml )
 
@@ -55,36 +55,37 @@
 ### 4.1. Setup
 
 - Create an environment variable `STREAM_BEARER_TOKEN` with your Twitter API bearer token.
-- Load the source folder(s) into your favorite IDE and run them.
+- Clone the source code repo from <https://github.com/judcole/twitter-api-java>.
+- `cd twitter-api-java/twitter-ui` and `npm install` to install dependent Node packages for the UI.
+- Load the source folder(s) into your favorite IDE and run them (see below).
 
-### 4.2. Implementation Notes
+### 4.2. Manual Testing
+
+- Select project `twitter-api` for the Web API service to collect tweet data and provide it in an API.
+  - Run or Debug the project and browse to:
+    - <http://localhost:8080/getStats> for the raw API results.
+    - <http://localhost:8080/swagger-ui/index.html> for the Swagger API.
+    - Refer to the Output window to see log messages such as for the Tweet processing.
+    - Use Swagger in the browser to execute the GET call to the API endpoint.
+      - Inspect the response body.
+      - Execute the API call repeatedly to see increasing numbers in stats.
+    - Test the API from the command line `curl -X 'GET' 'http://localhost:8080/getStats'`.
+- Select project `twitter-ui` for the Web App User Interface that calls the Web API (which must still be running).
+  - Run the project using `npm run dev` from the `twitter-ui` folder.
+    - View the statistics in a browser at <http://localhost:5000/>.
+
+### 4.3. Automated Unit Tests
+
+- Select project `twitter-api`
+  - Run all automated tests or open the tests folder `twitter-api/src/test` or your Test Explorer and run selected tests.
+
+## 5. Implementation Notes
 
 - It was not mentioned in the specification but Twitter tags are NOT case sensitive, so hashtags must be counted as equal when they only differ by case.
 
-### 4.3. Manual Testing
+## 6. Next Steps / To Do List
 
-- Select project `twitter-api` for the Web API service to collect tweet data and provide it in an API
-  - Run or Debug the project and browse to:
-    - <http://localhost:8080/getStats> for the raw API results
-    - <http://localhost:8080/swagger-ui/index.html> for the Swagger API
-    - Refer to the Output window to see log messages such as for the Tweet processing
-    - Use Swagger in the browser to execute the GET call to the API endpoint
-      - Inspect the response body
-      - Execute the API call repeatedly to see increasing numbers in stats
-    - Test the API from the command line `curl -X 'GET' 'http://localhost:8080/getStats'`
-- Select project `twitter-ui` for the Web App User Interface that calls the Web API (which must still be running)
-  - Run the project using `npm run dev`
-    - View the statistics in a browser at <http://localhost:5000/>
-- Stop debugging
-
-### 4.4. Automated Unit Tests
-
-- Select project `twitter-api`
-  - Run all automated tests or open the tests from Test Explorer (`Ctrl+E, T`) and run selected tests
-
-## 5. Next Steps / To Do List
-
-### 5.1. To Do before submission
+### 6.1. To Do before submission
 
 - [x] Create twitter-api project to process calls to Twitter API
   - [x] Replace controller with dummy stream stats controller
@@ -114,7 +115,7 @@
   - [x] FrontEnd: TypeScript, Svelte, Bootstrap: Reactive Web UI
   - [x] Screenshots
 
-### 5.2. Future features and steps for consideration
+### 6.2. Future features and steps for consideration
 
 - Use feature branches, merges, and pull requests for multi-user development, rather than just working on `main` branch!
 
@@ -143,9 +144,9 @@
 |    L     | UI           |   S    | Handle any multi-cultural and multi-lingual requirements such as date and number formatting and hashtag regexp        |
 |    L     | Tests        |   S    | Handle any remaining edge cases of running the date and time tests at exactly midnight                                |
 
-## 6. Design diagrams
+## 7. Design diagrams
 
-### 6.1. twitter-api Web API
+### 7.1. twitter-api Web API
 
 ```mermaid
 flowchart LR
@@ -177,7 +178,7 @@ flowchart LR
   end
 ```
 
-### 6.2. twitter-ui Web Application
+### 7.2. twitter-ui Web Application
 
 ```mermaid
 flowchart LR
@@ -191,7 +192,7 @@ flowchart LR
   end
 ```
 
-## 7. Twitter APIs
+## 8. Twitter APIs
 
 - [Apply for API access](https://developer.twitter.com/en/apply-for-access)
 
@@ -211,7 +212,7 @@ flowchart LR
   curl -X GET "https://api.twitter.com/2/tweets/sample/stream" -H "Authorization: Bearer ${env:BEARER_TOKEN}"
   ```
 
-### 7.1. Using Postman to access Twitter APIs
+### 8.1. Using Postman to access Twitter APIs
 
 - Install Postman using Chocolatey
   - `choco install postman -y`
@@ -231,7 +232,7 @@ flowchart LR
 - Response body will be empty because Twitter does not fill streams  for Postman
 - Use Code | cURL to view the command, then copy and run it
 
-### 7.2. Run the solution projects under Docker
+### 8.2. Run the solution projects under Docker
 
 - Not Yet Available for this version!
 
