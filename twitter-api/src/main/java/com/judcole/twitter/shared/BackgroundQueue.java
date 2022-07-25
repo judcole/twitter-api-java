@@ -9,12 +9,19 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class BackgroundQueue<E> implements IBackgroundQueue<E> {
 
-    private final int QUEUE_SIZE = 100000;
-
     /**
      * The item queue.
      */
-    private final ArrayBlockingQueue<E> items = new ArrayBlockingQueue<>(QUEUE_SIZE);
+    private final ArrayBlockingQueue<E> items;
+
+    /**
+     * Instantiates a new Background queue.
+     *
+     * @param queueSize the queue size
+     */
+    public BackgroundQueue(int queueSize) {
+        items = new ArrayBlockingQueue<>(queueSize);
+    }
 
     /**
      * Try to remove and return the item at the beginning of the queue.
@@ -47,6 +54,15 @@ public class BackgroundQueue<E> implements IBackgroundQueue<E> {
      * @return the count
      */
     public int getCount() {
+        return items.size() - items.remainingCapacity();
+    }
+
+    /**
+     * Get the size of the queue.
+     *
+     * @return the size
+     */
+    public int getSize() {
         return items.size();
     }
 }

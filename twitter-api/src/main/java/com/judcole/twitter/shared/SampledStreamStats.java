@@ -14,8 +14,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class SampledStreamStats {
 
-    @Getter
     // Average daily number of tweets received
+    @Getter
     private long dailyTweets;
 
     // Average hourly number of tweets received

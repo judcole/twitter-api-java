@@ -25,9 +25,6 @@ public class SampledStreamController {
     // Shared total statistics
     private final SampledStreamStats stats;
 
-    // Default size of statistics table
-    private static final int STATS_SIZE = 10;
-
     /**
      * Instantiates a new Sampled stream controller.
      *
@@ -35,7 +32,7 @@ public class SampledStreamController {
      */
     public SampledStreamController(SampledStreamStatsFactory statsFactory) {
         // Save the shared stats parameter
-        stats = statsFactory.getStatsInstance(STATS_SIZE);
+        stats = statsFactory.getStatsInstance(SampledStreamStatsFactory.DEFAULT_STATS_SIZE);
     }
 
     /**

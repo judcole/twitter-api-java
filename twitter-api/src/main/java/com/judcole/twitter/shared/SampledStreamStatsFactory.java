@@ -10,6 +10,9 @@ import java.security.InvalidParameterException;
 @Component
 public class SampledStreamStatsFactory {
 
+    // Default size of statistics table
+    public static final int DEFAULT_STATS_SIZE = 10;
+
     // Shared total statistics
     private SampledStreamStats sharedStats = null;
 

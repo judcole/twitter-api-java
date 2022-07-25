@@ -27,4 +27,11 @@ public interface IBackgroundQueue<E> {
      * @return the count
      */
     int getCount();
+
+    /**
+     * Get the size of the queue.
+     *
+     * @return the size
+     */
+    int getSize();
 }
