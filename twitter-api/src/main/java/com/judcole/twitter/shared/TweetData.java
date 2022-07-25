@@ -1,8 +1,11 @@
 package com.judcole.twitter.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * The class for the data for an incoming tweet.
  */
+@JsonIgnoreProperties
 public class TweetData {
     /**
      * The tweet Id.

@@ -54,7 +54,7 @@ public class BackgroundQueue<E> implements IBackgroundQueue<E> {
      * @return the count
      */
     public int getCount() {
-        return items.size() - items.remainingCapacity();
+        return items.size();
     }
 
     /**
@@ -63,6 +63,6 @@ public class BackgroundQueue<E> implements IBackgroundQueue<E> {
      * @return the size
      */
     public int getSize() {
-        return items.size();
+        return items.size() + items.remainingCapacity();
     }
 }
