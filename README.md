@@ -1,6 +1,6 @@
 # Twitter API Code Challenge Notes
 
-[//]: # ( date: 07/23/22 )
+[//]: # ( date: 07/25/22 )
 
 ## 1. Overview
 
@@ -16,9 +16,9 @@
 - [3. Folders and Files](#3-folders-and-files)
 - [4. Usage and Testing](#4-usage-and-testing)
   - [4.1. Setup](#41-setup)
-  - [Implementation Notes](#implementation-notes)
-  - [4.2. Manual Testing](#42-manual-testing)
-  - [4.3. Automated Unit Tests](#43-automated-unit-tests)
+  - [4.2. Implementation Notes](#42-implementation-notes)
+  - [4.3. Manual Testing](#43-manual-testing)
+  - [4.4. Automated Unit Tests](#44-automated-unit-tests)
 - [5. Next Steps / To Do List](#5-next-steps--to-do-list)
   - [5.1. To Do before submission](#51-to-do-before-submission)
   - [5.2. Future features and steps for consideration](#52-future-features-and-steps-for-consideration)
@@ -28,7 +28,6 @@
 - [7. Twitter APIs](#7-twitter-apis)
   - [7.1. Using Postman to access Twitter APIs](#71-using-postman-to-access-twitter-apis)
   - [7.2. Run the solution projects under Docker](#72-run-the-solution-projects-under-docker)
-- [8. References](#8-references)
 
 [//]: # ( spell-checker: ignore blazor choco dockerignore plantuml )
 
@@ -58,67 +57,62 @@
 - Create an environment variable `STREAM_BEARER_TOKEN` with your Twitter API bearer token.
 - Load the source folder(s) into your favorite IDE and run them.
 
-### Implementation Notes
+### 4.2. Implementation Notes
 
 - It was not mentioned in the specification but Twitter tags are NOT case sensitive, so hashtags must be counted as equal when they only differ by case.
 
-### 4.2. Manual Testing
+### 4.3. Manual Testing
 
 - Select project `twitter-api` for the Web API service to collect tweet data and provide it in an API
-  - Select `IIS Express` as Build Target on drop down (could also select `Docker` if you have Docker Desktop and WSL installed)
-  - Select preferred Web Browser using Build Target drop down if required
-  - Run (`Ctrl+F5`) or Debug (`F5`) the project, which should open a browser with the Swagger API
+  - Run or Debug the project and browse to:
+    - <http://localhost:8080/getStats> for the raw API results
+    - <http://localhost:8080/swagger-ui/index.html> for the Swagger API
     - Refer to the Output window to see log messages such as for the Tweet processing
     - Use Swagger in the browser to execute the GET call to the API endpoint
       - Inspect the response body
       - Execute the API call repeatedly to see increasing numbers in stats
-    - Test the API from the command line `curl -X 'GET' 'https://localhost:44355/api/GetSampledStream' -H 'accept: text/plain'`
+    - Test the API from the command line `curl -X 'GET' 'http://localhost:8080/getStats'`
 - Select project `twitter-ui` for the Web App User Interface that calls the Web API (which must still be running)
-  - Select `IIS Express` as Build Target (could also select `Docker` if you have Docker Desktop and WSL installed)
-  - Select preferred Web Browser using Build Target drop down if required
-  - Run (`Ctrl+F5`) or Debug (`F5`) the project, which should open a browser with the Swagger API
-    - View the statistics
-- Stop debugging (`Shift` `F5`)
+  - Run the project using `npm run dev`
+    - View the statistics in a browser at <http://localhost:5000/>
+- Stop debugging
 
-### 4.3. Automated Unit Tests
+### 4.4. Automated Unit Tests
 
-- Select project `twitter-ui`
-  - Note that all browser Unit Tests are currently hard coded to use Chrome (see To Do List)
-  - Select `IIS Express` as Build Target on drop down (could also select `Docker` if you have Docker Desktop and WSL installed)
-  - Start project without Debugging (`Ctrl+F5`) to show default Web page on localhost
-    - If this is not run then the Selenium tests of the results web page will be skipped
-      - Chrome will still load and exit a couple of times, but tests will still succeed
-    - If this is run then the Selenium based tests of the results web page will be performed
-  - Run all automated tests (`Ctrl+R, A`) or open the tests from Test Explorer (`Ctrl+E, T`) and run selected tests
+- Select project `twitter-api`
+  - Run all automated tests or open the tests from Test Explorer (`Ctrl+E, T`) and run selected tests
 
 ## 5. Next Steps / To Do List
 
 ### 5.1. To Do before submission
 
-- [ ] Create twitter-api project to process calls to Twitter API
+- [x] Create twitter-api project to process calls to Twitter API
   - [x] Replace controller with dummy stream stats controller
   - [x] Add Test suite project and basic tests
-  - [ ] Add strategic exception handling
+  - [x] Add strategic exception handling
   - [x] Stats for API result to use shared class
     - [x] Return extra stats
-  - [ ] Create background task to attach to Twitter stream
-    - [ ] Add dummy tweets to concurrent queue
-    - [ ] Add incoming tweets to concurrent queue
-  - [ ] Create background service to pull incoming tweets from concurrent queue
-    - [ ] Loop through tweets extracting hashtags
-    - [ ] Add / update totals using a dictionary
-      - [ ] Add / update top 10 tag list
-- [ ] Create twitter-ui project to display twitter hashtag statistics
-  - [ ] Replace home page with dummy stream stats
-  - [ ] Add basic tests
-  - [ ] Stats for API result to use shared class
-  - [ ] Call collector API to retrieve latest stats
+  - [x] Create background task to attach to Twitter stream
+    - [x] Add dummy tweets to concurrent queue
+    - [x] Add incoming tweets to concurrent queue
+  - [x] Create background service to pull incoming tweets from concurrent queue
+    - [x] Loop through tweets extracting hashtags
+    - [x] Add / update totals using a dictionary
+      - [x] Add / update top 10 tag list
+- [x] Create twitter-ui project to display twitter hashtag statistics
+  - [x] Replace home page with dummy stream stats
+  - [x] Add basic tests
+  - [x] Call collector API to retrieve latest stats
 - [ ] Documentation
-  - [ ] Usage and testing section 4
-  - [ ] Update diagrams with the latest design
-- [ ] Submission email
-  - [ ] Set Twitter API bearer token in `STREAM_BEARER_TOKEN` environment variable
+  - [x] Usage and testing section 4
+  - [x] Update diagrams with the latest design
+- [x] Submission email
+  - [x] Set Twitter API bearer token in `STREAM_BEARER_TOKEN` environment variable
   - [x] GitHub URL and authentication (make repo public)
+  - [x] Almost 1500 lines of Java code
+  - [x] Backend: Java: Automated test suite, Dependency Injection, Logging, Async tasks, JavaDoc and Markdown documentation
+  - [x] FrontEnd: TypeScript, Svelte, Bootstrap: Reactive Web UI
+  - [x] Screenshots
 
 ### 5.2. Future features and steps for consideration
 
@@ -146,7 +140,7 @@
 |    M     | Tests        |   M    | Enhance Web UI tests to also run in FireFox and Edge                                                                  |
 |    M     | Tests        |   M    | Finish setting up unit tests to run in parallel                                                                       |
 |    M     | UI           |   S    | Add auto refresh of the Web app page and a combo box to control the frequency                                         |
-|    L     | UI           |   S    | Handle any multi-cultural and multi-lingual requirements such as date and number formatting                           |
+|    L     | UI           |   S    | Handle any multi-cultural and multi-lingual requirements such as date and number formatting and hashtag regexp        |
 |    L     | Tests        |   S    | Handle any remaining edge cases of running the date and time tests at exactly midnight                                |
 
 ## 6. Design diagrams
@@ -249,5 +243,3 @@ docker container logs <container id>
 # Run a shell in the container for troubleshooting
 docker container exec -i <container id> bash
 ```
-
-## 8. References
