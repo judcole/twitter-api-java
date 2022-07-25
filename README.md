@@ -233,6 +233,8 @@ flowchart LR
 
 ### 7.2. Run the solution projects under Docker
 
+- Not Yet Available for this version!
+
 ```sh
 # Set up the Twitter API token
 export STREAM_BEARER_TOKEN=<token>
