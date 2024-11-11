@@ -3,7 +3,7 @@
 -->
 
 <script lang="ts">
-    export let dailyTweets, hourlyTweets, lastUpdated, status, topHashtagCounts, topHashtags, topHashtagsSize,
+    export let dailyTweets, hourlyTweets, lastUpdated, status, topHashtagCounts, topHashtags,
         totalHashtags, totalTweets, tweetQueueCount
 
     lastUpdated = lastUpdated ? lastUpdated.substring(0, 19).replace('T', ' ') : "";
